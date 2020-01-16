@@ -29,7 +29,7 @@ Optional arguments:
 """
 
 __author__ = "Quinn Luetzow"
-__version__ = 2.0
+__version__ = 2.0.1
 
 
 import sys
@@ -248,7 +248,7 @@ def main():
                 print(__doc__)
                 exit(1)
 
-    for i in range(chars_to_generate):
+    for ch in range(chars_to_generate):
         character = generate()
         print_char(character)
 
