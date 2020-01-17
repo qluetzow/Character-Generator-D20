@@ -135,11 +135,12 @@ def languages(player):
 def health(player):
     """Assign charcter's class-based health points and hit dice"""
 
-    d6 = [BaseClass.SORCERER, BaseClass.WIZARD]
-    d8 = [BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
-           BaseClass.ROGUE, BaseClass.WARLOCK]
-    d10 = [BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER]
-    d12 = [BaseClass.BARBARIAN]
+    d6 = {BaseClass.SORCERER, BaseClass.WIZARD}
+    d8 = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
+           BaseClass.ROGUE, BaseClass.WARLOCK}
+    d10 = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
+
+    d12 = {BaseClass.BARBARIAN}
 
     if player.char_class in d8:
         player.hp = 8 + player.stats[Stat.CONSTITUTION]

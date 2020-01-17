@@ -109,23 +109,23 @@ class RaceTraits(Enum):
 
 
 race_traits = {
-    Race.HUMAN: {},
+    Race.HUMAN: [],
 
-    Race.ELF: (RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY, RaceTraits.TRANCE),
+    Race.ELF: [RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY, RaceTraits.TRANCE],
 
-    Race.DWARF: (RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE, RaceTraits.DWARVERN_COMBAT_TRAINING,
-                 RaceTraits.TOOL_PROFICIENCY, RaceTraits.STONECUNNING),
+    Race.DWARF: [RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE, RaceTraits.DWARVERN_COMBAT_TRAINING,
+                 RaceTraits.TOOL_PROFICIENCY, RaceTraits.STONECUNNING],
 
-    Race.GNOME: (RaceTraits.DARKVISION, RaceTraits.GNOME_CUNNING),
+    Race.GNOME: [RaceTraits.DARKVISION, RaceTraits.GNOME_CUNNING],
 
-    Race.HALFLING: (RaceTraits.LUCKY, RaceTraits.BRAVE, RaceTraits.HALFLING_NIMBLENESS),
+    Race.HALFLING: [RaceTraits.LUCKY, RaceTraits.BRAVE, RaceTraits.HALFLING_NIMBLENESS],
 
-    Race.HALF_ELF: (RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY, RaceTraits.SKILL_VERSATILITY),
+    Race.HALF_ELF: [RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY, RaceTraits.SKILL_VERSATILITY],
 
-    Race.HALF_ORC: (RaceTraits.DARKVISION, RaceTraits.MENACING, RaceTraits.RELENTLESS_ENDURANCE,
-                    RaceTraits.SAVAGE_ATTACKS),
+    Race.HALF_ORC: [RaceTraits.DARKVISION, RaceTraits.MENACING, RaceTraits.RELENTLESS_ENDURANCE,
+                    RaceTraits.SAVAGE_ATTACKS],
 
-    Race.DRAGONBORN: (RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE, RaceTraits.BREATH_WEAPON),
+    Race.DRAGONBORN: [RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE, RaceTraits.BREATH_WEAPON],
 
-    Race.TIEFLING: (RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE, RaceTraits.INFERNAL_LEGACY)
+    Race.TIEFLING: [RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE, RaceTraits.INFERNAL_LEGACY]
 }
