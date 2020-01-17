@@ -54,6 +54,8 @@ class Character:
             Stat.INTELLIGENCE: 0, Stat.WISDOM: 0, Stat.CHARISMA: 0
         }
         self.level = 0
+        self.hp = 0
+        self.hit_dice = None
         self.speed = None
         self.size = None
         self.languages = []
@@ -130,10 +132,47 @@ def languages(player):
         player.languages.append(Language.INFERNAL)
 
 
+def health(player):
+    """Assign charcter's class-based health points and hit dice"""
+
+    d6 = [BaseClass.SORCERER, BaseClass.WIZARD]
+    d8 = [BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
+           BaseClass.ROGUE, BaseClass.WARLOCK]
+    d10 = [BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER]
+    d12 = [BaseClass.BARBARIAN]
+
+    if player.char_class in d8:
+        player.hp = 8 + player.stats[Stat.CONSTITUTION]
+        player.hit_dice = "1d8"
+        if player.level > 1:
+            for i in range(2, player.level):
+                player.hp += randint(1, 8) + player.stats[Stat.CONSTITUTION]
+
+    elif player.char_class in d10:
+        player.hp = 10 + player.stats[Stat.CONSTITUTION]
+        player.hit_dice = "1d10"
+        if player.level > 1:
+            for i in range(2, player.level):
+                player.hp += randint(1, 10) + player.stats[Stat.CONSTITUTION]
+
+    elif player.char_class in d6:
+        player.hp = 6 + player.stats[Stat.CONSTITUTION]
+        player.hit_dice = "1d6"
+        if player.level > 1:
+            for i in range(2, player.level):
+                player.hp += randint(1, 6) + player.stats[Stat.CONSTITUTION]
+
+    elif player.char_class in d12:
+        player.hp = 12 + player.stats[Stat.CONSTITUTION]
+        player.hit_dice = "1d12"
+        if player.level > 1:
+            for i in range(2, player.level):
+                player.hp += randint(1, 12) + player.stats[Stat.CONSTITUTION]
+
 def race_stat_effects(player):
     """Apply racial stat bonuses to the character being created"""
 
-    player.speed = 30       # "Default" or most common speed and size, here to avoid repetition
+    player.speed = 30  # "Default" or most common speed and size, here to avoid repetition
     player.size = Size.MEDIUM
 
     if player.race is Race.HUMAN:
@@ -209,6 +248,8 @@ def print_char(character):
     print("Racial Traits: {0}".format(capwords(", ".join(x.name for x in character.traits).replace("_", " "))))
     print("Class: {0}".format(character.char_class.name.capitalize()))
     print("Level: {0}".format(character.level))
+    print("HP: {0}".format(character.hp))
+    print("Hit Dice: {0}".format(character.hit_dice))
     print("Alignment: {0}".format(capwords(character.alignment.name.replace("_", " "))))
 
     for key, val in character.stats.items():
@@ -234,6 +275,7 @@ def generate(lvl):
     stats(player)
     race_stat_effects(player)
     level(player, lvl)
+    health(player)
     languages(player)
     traits(player)
 
@@ -247,24 +289,24 @@ def main():
     lvl = 1
 
     if len(sys.argv) >= 2:
-            if sys.argv[1] == "--version":
-                print("D&D Character Generator 5th Edition version {0}".format(__version__))
-                exit(0)
-            elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
-                print(__doc__)
-                exit(0)
-            elif sys.argv[1]:
-                chars_to_generate = int((sys.argv[1])[1:])  # Exclude the - on the argument
+        if sys.argv[1] == "--version":
+            print("D&D Character Generator 5th Edition version {0}".format(__version__))
+            exit(0)
+        elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
+            print(__doc__)
+            exit(0)
+        elif sys.argv[1]:
+            chars_to_generate = int((sys.argv[1])[1:])  # Exclude the - on the argument
 
-                try:
-                    lvl = (sys.argv[2])[1:]  # Exclude the - on the argument
-                except IndexError:
-                    pass  # Do nothing, use default value set above
+            try:
+                lvl = int((sys.argv[2])[1:])  # Exclude the - on the argument
+            except IndexError:
+                pass  # Do nothing, use default value set above
 
-            else:
-                print("Invalid argument passed: {0}".format(sys.argv[1]))
-                print(__doc__)
-                exit(1)
+        else:
+            print("Invalid argument passed: {0}".format(sys.argv[1]))
+            print(__doc__)
+            exit(1)
 
     for ch in range(chars_to_generate):
         character = generate(lvl)
