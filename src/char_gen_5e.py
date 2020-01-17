@@ -20,16 +20,17 @@
 
 A program to generate randomized characters for D&D 5th Edition.
 
-Usage: python char_gen_5e.py [--version] [--help] [-N]
+Usage: python char_gen_5e.py [--version] [--help] [-N] [-L]
 
 Optional arguments:
     -h, --help     Show this help message and exit
     --version      Show the program version and exit
     -N             Generate N number of characters, defaults to 1 if not specified
+    -L             Generate a character of level L, defaults to 1 if not specified
 """
 
 __author__ = "Quinn Luetzow"
-__version__ = 2.0.1
+__version__ = 2.2
 
 
 import sys
@@ -52,6 +53,7 @@ class Character:
             Stat.STRENGTH: 0, Stat.DEXTERITY: 0, Stat.CONSTITUTION: 0,
             Stat.INTELLIGENCE: 0, Stat.WISDOM: 0, Stat.CHARISMA: 0
         }
+        self.level = 0
         self.speed = None
         self.size = None
         self.languages = []
@@ -88,6 +90,18 @@ def alignment(player):
     """Randomly determine alignment of the character being created"""
 
     player.alignment = Alignment(randint(0, 8))
+
+
+def level(player, lvl):
+    """Assign a character level to the character being generated"""
+
+    player.level = lvl
+
+
+def traits(player):
+    """Assign appropriate racial traits to the character being created"""
+
+    player.traits = race_traits[player.race]
 
 
 def languages(player):
@@ -187,11 +201,6 @@ def race_stat_effects(player):
             player.stats[key] = 18
 
 
-def traits(player):
-    """Assign appropriate racial traits to the character being created"""
-    player.traits = race_traits[player.race]
-
-
 def print_char(character):
     """Output each attribute of the created character to the console."""
 
@@ -199,6 +208,7 @@ def print_char(character):
     print("Race: {0}".format(character.race.name.capitalize()))
     print("Racial Traits: {0}".format(capwords(", ".join(x.name for x in character.traits).replace("_", " "))))
     print("Class: {0}".format(character.char_class.name.capitalize()))
+    print("Level: {0}".format(character.level))
     print("Alignment: {0}".format(capwords(character.alignment.name.replace("_", " "))))
 
     for key, val in character.stats.items():
@@ -212,7 +222,7 @@ def print_char(character):
     print()  # Print empty line between characters
 
 
-def generate():
+def generate(lvl):
     """Workhorse function to keep main() uncluttered."""
 
     player = Character()
@@ -223,6 +233,7 @@ def generate():
     alignment(player)
     stats(player)
     race_stat_effects(player)
+    level(player, lvl)
     languages(player)
     traits(player)
 
@@ -233,23 +244,30 @@ def main():
     """Main() function for program."""
 
     chars_to_generate = 1
+    lvl = 1
 
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
             if sys.argv[1] == "--version":
                 print("D&D Character Generator 5th Edition version {0}".format(__version__))
                 exit(0)
             elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
                 print(__doc__)
                 exit(0)
-            elif (sys.argv[1])[1:]:
-                chars_to_generate = int((sys.argv[1])[1:])
+            elif sys.argv[1]:
+                chars_to_generate = int((sys.argv[1])[1:])  # Exclude the - on the argument
+
+                try:
+                    lvl = (sys.argv[2])[1:]  # Exclude the - on the argument
+                except IndexError:
+                    pass  # Do nothing, use default value set above
+
             else:
                 print("Invalid argument passed: {0}".format(sys.argv[1]))
                 print(__doc__)
                 exit(1)
 
     for ch in range(chars_to_generate):
-        character = generate()
+        character = generate(lvl)
         print_char(character)
 
 
