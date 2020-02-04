@@ -59,12 +59,13 @@ class Character:
         self.speed = None
         self.size = None
         self.languages = []
+        self.proficiencies = set()
 
 
 def gender(player):
     """Randomly determine the gender of the character being created"""
 
-    gen = randint(0, 99)  # 0-49 results in male, 50-99 results in female
+    gen = randint(1, 100)  # 0-49 results in male, 50-99 results in female
 
     player.gender = True if gen >= 50 else False
 
@@ -135,11 +136,12 @@ def languages(player):
 def health(player):
     """Assign charcter's class-based health points and hit dice"""
 
-    d6 = [BaseClass.SORCERER, BaseClass.WIZARD]
-    d8 = [BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
-           BaseClass.ROGUE, BaseClass.WARLOCK]
-    d10 = [BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER]
-    d12 = [BaseClass.BARBARIAN]
+    d6 = {BaseClass.SORCERER, BaseClass.WIZARD}
+    d8 = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
+           BaseClass.ROGUE, BaseClass.WARLOCK}
+    d10 = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
+
+    d12 = {BaseClass.BARBARIAN}
 
     if player.char_class in d8:
         player.hp = 8 + player.stats[Stat.CONSTITUTION]
@@ -240,22 +242,101 @@ def race_stat_effects(player):
             player.stats[key] = 18
 
 
+def proficiencies(player):
+    """Assign proficiencies to the character being created."""
+
+    # Cutoff point for gaming set proficiencies, needed for monk
+    _game_set_cutoff = 32
+
+    # Cutoff points for instrument proficiencies, needed for bard
+    _instrument_start_cutoff = 19
+    _instrument_end_cutoff = 28
+
+    # How many random proficiencies
+    c2 = {
+        BaseClass.BARBARIAN, BaseClass.CLERIC, BaseClass.DRUID,
+        BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.SORCERER,
+        BaseClass.WARLOCK, BaseClass.WIZARD, BaseClass.MONK
+    }
+    c3 = {BaseClass.BARD, BaseClass.RANGER}
+    c4 = {BaseClass.ROGUE}
+
+    # Monk can also choose from anything except game sets
+    monk_opt = [ToolProficiencies(x) for x in range(_game_set_cutoff)]
+
+    # Bard can choose from random instruments
+    bard_opt = [
+        ToolProficiencies(x) for x in range(_instrument_start_cutoff,
+                                            _instrument_end_cutoff)
+    ]
+
+
+    def select(amount, _class=None):
+        """Select the random proficiencies for the character"""
+
+        options_list = list(class_proficiency_choices[player.char_class])
+
+        # range() starts at 0, so subtract 1 to get the right number of selections
+        for i in range(amount - 1):
+            while True:
+                selection = options_list[randint(0, len(options_list) - 1)]
+                if selection not in player.proficiencies:
+                    break
+
+        # Add random extra proficiencies for Monk and Bard
+        if player.char_class is BaseClass.MONK:
+            player.proficiencies.add(monk_opt[randint(0, len(monk_opt) - 1)])
+        elif player.char_class is BaseClass.BARD:
+            instruments = 3
+            while instruments > 0:
+                selection = bard_opt[randint(0, len(bard_opt) - 1)]
+                if selection not in player.proficiencies:
+                    player.proficiencies.add(selection)
+                    instruments -= 1
+                else:
+                    continue
+
+
+    player.proficiencies = race_proficiencies[player.race]
+    player.proficiencies.add(x for x in class_proficiencies[player.char_class])
+
+    if player.char_class in c2:
+        select(2, player.char_class)
+    elif player.char_class in c3:
+        select(3, player.char_class)
+    elif player.char_class in c4:
+        select(4, player.char_class)
+
+
+
+
 def print_char(character):
     """Output each attribute of the created character to the console."""
 
     print("Gender: {0}".format("Female" if character.gender else "Male"))
     print("Race: {0}".format(character.race.name.capitalize()))
-    print("Racial Traits: {0}".format(capwords(", ".join(x.name for x in character.traits).replace("_", " "))))
+
+    print("Racial Traits: {0}".format(
+        capwords(", ".join(x.name for x in character.traits).replace("_", " ")))
+    )
+
     print("Class: {0}".format(character.char_class.name.capitalize()))
     print("Level: {0}".format(character.level))
     print("HP: {0}".format(character.hp))
     print("Hit Dice: {0}".format(character.hit_dice))
-    print("Alignment: {0}".format(capwords(character.alignment.name.replace("_", " "))))
+
+    print("Alignment: {0}".format(
+        capwords(
+            character.alignment.name.replace("_", " "))
+        )
+    )
 
     for key, val in character.stats.items():
         print("{0}: {1}".format(key.name.lower().capitalize(), character.stats[key]))
 
-    print("Languages Spoken: {0}".format(capwords(", ".join(x.name for x in character.languages).replace("_", " "))))
+    print("Languages Spoken: {0}".format(
+        capwords(", ".join(x.name for x in character.languages).replace("_", " ")))
+    )
 
     print("Walk speed: {0} feet".format(character.speed))
     print("Size: {0}".format(character.size.name.capitalize()))
@@ -278,6 +359,7 @@ def generate(lvl):
     health(player)
     languages(player)
     traits(player)
+    proficiencies(player)
 
     return player
 

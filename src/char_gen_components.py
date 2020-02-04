@@ -108,24 +108,397 @@ class RaceTraits(Enum):
     INFERNAL_LEGACY = "Infernal Legacy"
 
 
+class StatProficiencies(Enum):
+    STRENGTH = 0
+    DEXTERITY = 1
+    CONSTITUTION = 2
+    INTELLIGENCE = 3
+    WISDOM = 4
+    CHARISMA = 5
+
+
+class TestProficiencies(Enum):
+    ATHLETICS = 0
+    ACROBATICS = 1
+    SLEIGHT_OF_HAND = 8
+    STEALTH = 9
+    ARCANA = 10
+    HISTORY = 11
+    INVESTIGATION = 12
+    NATURE = 13
+    RELIGION = 14
+    ANIMAL_HANDLING = 15
+    INSIGHT = 16
+    MEDICINE = 17
+    PERCEPTION = 18
+    SURVIVAL = 19
+    DECEPTION = 20
+    INTIMIDATION = 21
+    PERFORMANCE = 22
+    PERSUASION = 23
+
+
+class BaseEquipProficiencies(Enum):
+    SIMPLE_WEAPONS = 0
+    MARTIAL_WEAPONS = 1
+    LIGHT_ARMOR = 2
+    MEDIUM_ARMOR = 3
+    HEAVY_ARMOR = 4
+    SHIELD = 5
+
+
+class EquipProficiencies(Enum):
+    CLUB = 0
+    DAGGER = 1
+    GREATCLUB = 2
+    Handaxe = 3
+    Javelin = 4
+    LIGHT_HAMMER = 5
+    MACE = 6
+    QUARTERSTAFF = 7
+    SICKLE = 8
+    SPEAR = 9
+    UNARMED = 10
+    LIGHT_CROSSBOW = 11
+    DART = 12
+    SHORTBOW = 13
+    SLING = 14
+    BATTLEAXE = 15
+    FLAIL = 16
+    GLAIVE = 17
+    GREATAXE = 18
+    GREATSWORD = 19
+    HALBERD = 20
+    LANCE = 21
+    LONGSWORD = 22
+    MAUL = 23
+    MORNINGSTAR = 24
+    PIKE = 25
+    RAPIER = 26
+    SCIMITAR = 27
+    SHORTSWORD = 28
+    TRIDENT = 29
+    WAR_PICK = 30
+    WARHAMMER = 31
+    WHIP = 32
+    BLOWGUN = 33
+    HAND_CROSSBOW = 34
+    HEAVY_CROSSBOW = 35
+    LONGBOW = 36
+    NET = 37
+
+
+class ToolProficiencies(Enum):
+    ALCHEMIST_SUPPLIES = 0
+    BREWER_SUPPLIES = 1
+    CALLIGRAPHER_TOOLS = 2
+    CARPENTER_TOOLS = 3
+    CARTOGRAPHER_TOOLS = 4
+    COBBLER_TOOLS = 5
+    COOK_UTENSILS = 6
+    GLASSBLOWER_TOOLS = 7
+    JEWELER_TOOLS = 8
+    MASON_TOOLS = 9
+    PAINTER_SUPPLIES = 10
+    POTTER_TOOLS = 11
+    SMITH_TOOLS = 12
+    TINKER_TOOLS = 13
+    WEAVER_TOOLS = 14
+    WOODCARVER_TOOLS = 15
+    DISGUISE_KIT = 16
+    FORGERY_KIT = 17
+    HERBALISM_KIT = 18
+    BAGPIPES = 19
+    DRUM = 20
+    DULCIMER = 21
+    FLUTE = 22
+    LUTE = 23
+    LYRE = 24
+    HORN = 25
+    PAN_FLUTE = 26
+    SHAWM = 27
+    VIOL = 28
+    NAVIGATOR_TOOLS = 29
+    POISONER_KIT = 30
+    THIEF_TOOLS = 31
+    DICE_SET = 32
+    DRAGONCHESS_SET = 33
+    PLAYING_CARD_SET = 34
+    THREE_DRAGON_ANTE_SET = 35
+
 race_traits = {
-    Race.HUMAN: {},
+    Race.HUMAN: [],
 
-    Race.ELF: (RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY, RaceTraits.TRANCE),
+    Race.ELF: [RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY, RaceTraits.TRANCE],
 
-    Race.DWARF: (RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE, RaceTraits.DWARVERN_COMBAT_TRAINING,
-                 RaceTraits.TOOL_PROFICIENCY, RaceTraits.STONECUNNING),
+    Race.DWARF: [RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE, RaceTraits.DWARVERN_COMBAT_TRAINING,
+                 RaceTraits.TOOL_PROFICIENCY, RaceTraits.STONECUNNING],
 
-    Race.GNOME: (RaceTraits.DARKVISION, RaceTraits.GNOME_CUNNING),
+    Race.GNOME: [RaceTraits.DARKVISION, RaceTraits.GNOME_CUNNING],
 
-    Race.HALFLING: (RaceTraits.LUCKY, RaceTraits.BRAVE, RaceTraits.HALFLING_NIMBLENESS),
+    Race.HALFLING: [RaceTraits.LUCKY, RaceTraits.BRAVE, RaceTraits.HALFLING_NIMBLENESS],
 
-    Race.HALF_ELF: (RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY, RaceTraits.SKILL_VERSATILITY),
+    Race.HALF_ELF: [RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY, RaceTraits.SKILL_VERSATILITY],
 
-    Race.HALF_ORC: (RaceTraits.DARKVISION, RaceTraits.MENACING, RaceTraits.RELENTLESS_ENDURANCE,
-                    RaceTraits.SAVAGE_ATTACKS),
+    Race.HALF_ORC: [RaceTraits.DARKVISION, RaceTraits.MENACING, RaceTraits.RELENTLESS_ENDURANCE,
+                    RaceTraits.SAVAGE_ATTACKS],
 
-    Race.DRAGONBORN: (RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE, RaceTraits.BREATH_WEAPON),
+    Race.DRAGONBORN: [RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE, RaceTraits.BREATH_WEAPON],
 
-    Race.TIEFLING: (RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE, RaceTraits.INFERNAL_LEGACY)
+    Race.TIEFLING: [RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE, RaceTraits.INFERNAL_LEGACY]
+}
+
+race_proficiencies = {
+    Race.HUMAN: set(),
+
+    Race.ELF: set(),
+
+    Race.DWARF: set(),
+
+    Race.GNOME: set(),
+
+    Race.HALFLING: set(),
+
+    Race.HALF_ELF: set(),
+
+    Race.HALF_ORC: {
+        TestProficiencies.INTIMIDATION
+    },
+
+    Race.DRAGONBORN: set(),
+
+    Race.TIEFLING: set()
+}
+
+""" Starting point for class-based proficiencies. This does NOT
+    list all of the proficiencies to be assigned, as some are
+    randomized. Due to the fact that if they were picked here,they
+    would be identical for all characters generated in a single
+    session, they will be generated separately later.
+"""
+class_proficiencies = {
+    BaseClass.BARBARIAN: {
+        StatProficiencies.STRENGTH,
+        StatProficiencies.CONSTITUTION,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR, BaseEquipProficiencies.SHIELD,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        BaseEquipProficiencies.MARTIAL_WEAPONS
+    },
+
+    BaseClass.BARD: {
+        StatProficiencies.DEXTERITY,
+        StatProficiencies.CHARISMA,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        EquipProficiencies.HAND_CROSSBOW, EquipProficiencies.LONGSWORD,
+        EquipProficiencies.RAPIER, EquipProficiencies.SHORTSWORD
+    },
+
+    BaseClass.CLERIC: {
+        StatProficiencies.WISDOM,
+        StatProficiencies.CHARISMA,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR, BaseEquipProficiencies.SHIELD,
+        BaseEquipProficiencies.SIMPLE_WEAPONS
+    },
+
+    BaseClass.DRUID: {
+        StatProficiencies.INTELLIGENCE,
+        StatProficiencies.WISDOM,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR, BaseEquipProficiencies.SHIELD,
+        EquipProficiencies.CLUB, EquipProficiencies.DAGGER,
+        EquipProficiencies.DART, EquipProficiencies.Javelin,
+        EquipProficiencies.QUARTERSTAFF,
+        EquipProficiencies.SCIMITAR, EquipProficiencies.SICKLE,
+        EquipProficiencies.SLING, EquipProficiencies.SPEAR,
+        ToolProficiencies.HERBALISM_KIT
+    },
+
+    BaseClass.FIGHTER: {
+        StatProficiencies.STRENGTH,
+        StatProficiencies.CONSTITUTION,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR,
+        BaseEquipProficiencies.HEAVY_ARMOR,
+        BaseEquipProficiencies.SHIELD,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        BaseEquipProficiencies.MARTIAL_WEAPONS
+    },
+
+    BaseClass.MONK: {
+        StatProficiencies.STRENGTH,
+        StatProficiencies.DEXTERITY,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        EquipProficiencies.SHORTSWORD
+    },
+
+    BaseClass.PALADIN: {
+        StatProficiencies.WISDOM,
+        StatProficiencies.CHARISMA,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR,
+        BaseEquipProficiencies.HEAVY_ARMOR,
+        BaseEquipProficiencies.SHIELD,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        BaseEquipProficiencies.MARTIAL_WEAPONS
+    },
+
+    BaseClass.RANGER: {
+        StatProficiencies.STRENGTH,
+        StatProficiencies.DEXTERITY,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.MEDIUM_ARMOR, BaseEquipProficiencies.SHIELD,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        BaseEquipProficiencies.MARTIAL_WEAPONS
+    },
+
+    BaseClass.ROGUE: {
+        StatProficiencies.DEXTERITY, StatProficiencies.INTELLIGENCE,
+        BaseEquipProficiencies.LIGHT_ARMOR,
+        BaseEquipProficiencies.SIMPLE_WEAPONS,
+        EquipProficiencies.HAND_CROSSBOW, EquipProficiencies.LONGSWORD,
+        EquipProficiencies.RAPIER, EquipProficiencies.SHORTSWORD,
+        ToolProficiencies.THIEF_TOOLS
+    },
+
+    BaseClass.SORCERER: {
+        StatProficiencies.CONSTITUTION,
+        StatProficiencies.CHARISMA,
+        EquipProficiencies.DAGGER, EquipProficiencies.DART,
+        EquipProficiencies.SLING, EquipProficiencies.QUARTERSTAFF,
+        EquipProficiencies.LIGHT_CROSSBOW
+    },
+
+    BaseClass.WIZARD: {
+        StatProficiencies.INTELLIGENCE,
+        StatProficiencies.WISDOM,
+        EquipProficiencies.DAGGER, EquipProficiencies.DART,
+        EquipProficiencies.SLING, EquipProficiencies.QUARTERSTAFF,
+        EquipProficiencies.LIGHT_CROSSBOW
+    },
+
+    BaseClass.WARLOCK: {
+        StatProficiencies.WISDOM,
+        StatProficiencies.CHARISMA,
+        BaseEquipProficiencies.LIGHT_ARMOR, BaseEquipProficiencies.SIMPLE_WEAPONS
+    }
+}
+
+""" Choices for the class-based proficiencies that are 'pick x from 
+    {y, z, ...}
+"""
+class_proficiency_choices = {
+    BaseClass.BARBARIAN: {
+        TestProficiencies.ANIMAL_HANDLING,
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.NATURE,
+        TestProficiencies.PERCEPTION,
+        TestProficiencies.SURVIVAL
+    },
+
+    BaseClass.BARD: {x for x in TestProficiencies},
+
+    BaseClass.CLERIC: {
+        TestProficiencies.HISTORY,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.MEDICINE,
+        TestProficiencies.PERSUASION,
+        TestProficiencies.RELIGION
+    },
+
+    BaseClass.DRUID: {
+        TestProficiencies.ARCANA,
+        TestProficiencies.ANIMAL_HANDLING,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.MEDICINE,
+        TestProficiencies.NATURE,
+        TestProficiencies.PERCEPTION,
+        TestProficiencies.RELIGION,
+        TestProficiencies.SURVIVAL
+    },
+
+    BaseClass.FIGHTER: {
+        TestProficiencies.ACROBATICS,
+        TestProficiencies.ANIMAL_HANDLING,
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.HISTORY,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.PERCEPTION,
+        TestProficiencies.SURVIVAL
+    },
+
+    BaseClass.MONK: {
+        TestProficiencies.ACROBATICS,
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.HISTORY,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.RELIGION,
+        TestProficiencies.STEALTH
+    },
+
+    BaseClass.PALADIN: {
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.MEDICINE,
+        TestProficiencies.PERSUASION,
+        TestProficiencies.RELIGION
+    },
+
+    BaseClass.RANGER: {
+        TestProficiencies.ANIMAL_HANDLING,
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INVESTIGATION,
+        TestProficiencies.NATURE,
+        TestProficiencies.PERCEPTION,
+        TestProficiencies.STEALTH,
+        TestProficiencies.SURVIVAL
+    },
+
+    BaseClass.ROGUE: {
+        TestProficiencies.ACROBATICS,
+        TestProficiencies.ATHLETICS,
+        TestProficiencies.DECEPTION,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.INVESTIGATION,
+        TestProficiencies.PERCEPTION,
+        TestProficiencies.PERFORMANCE,
+        TestProficiencies.PERSUASION,
+        TestProficiencies.SLEIGHT_OF_HAND,
+        TestProficiencies.STEALTH,
+    },
+
+    BaseClass.SORCERER: {
+        TestProficiencies.ARCANA,
+        TestProficiencies.DECEPTION,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.PERSUASION,
+        TestProficiencies.RELIGION
+    },
+
+    BaseClass.WIZARD: {
+        TestProficiencies.ARCANA,
+        TestProficiencies.ARCANA,
+        TestProficiencies.INSIGHT,
+        TestProficiencies.INVESTIGATION,
+        TestProficiencies.MEDICINE,
+        TestProficiencies.RELIGION
+    },
+
+    BaseClass.WARLOCK: {
+        TestProficiencies.ARCANA,
+        TestProficiencies.DECEPTION,
+        TestProficiencies.ARCANA,
+        TestProficiencies.INTIMIDATION,
+        TestProficiencies.INVESTIGATION,
+        TestProficiencies.NATURE,
+        TestProficiencies.RELIGION
+    }
 }
