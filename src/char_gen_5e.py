@@ -86,7 +86,10 @@ def stats(player):
     """Randomly assign initial stat values to the character being created"""
 
     for key, val in player.stats.items():
-        player.stats[key] = randint(3, 18)
+        # Using the 4d6 drop lowest method
+        rolls = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
+        rolls.remove(min(rolls))
+        player.stats[key] = sum(rolls)
 
 
 def alignment(player):
