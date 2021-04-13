@@ -37,7 +37,10 @@ import sys
 from random import randint
 from string import capwords
 
-from char_gen_components import *
+from char_gen_components import (
+    Alignment, Language, Size, Stat, BaseClass, Race, race_traits, race_proficiencies,
+    ToolProficiencies, class_proficiencies, class_proficiency_choices
+)
 
 
 class Character:
@@ -54,7 +57,7 @@ class Character:
             Stat.INTELLIGENCE: 0, Stat.WISDOM: 0, Stat.CHARISMA: 0
         }
         self.level = 0
-        self.hp = 0
+        self.health = 0
         self.hit_dice = None
         self.speed = None
         self.size = None
@@ -139,40 +142,40 @@ def languages(player):
 def health(player):
     """Assign character's class-based health points and hit dice"""
 
-    d6 = {BaseClass.SORCERER, BaseClass.WIZARD}
-    d8 = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
+    d6_hitdice = {BaseClass.SORCERER, BaseClass.WIZARD}
+    d8_hitdice = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
           BaseClass.ROGUE, BaseClass.WARLOCK}
-    d10 = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
+    d10_hitdice = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
 
-    d12 = {BaseClass.BARBARIAN}
+    d12_hitdice = {BaseClass.BARBARIAN}
 
-    if player.char_class in d8:
-        player.hp = 8 + player.stats[Stat.CONSTITUTION]
+    if player.char_class in d8_hitdice:
+        player.health = 8 + player.stats[Stat.CONSTITUTION]
         player.hit_dice = "1d8"
         if player.level > 1:
             for i in range(2, player.level):
-                player.hp += randint(1, 8) + player.stats[Stat.CONSTITUTION]
+                player.health += randint(1, 8) + player.stats[Stat.CONSTITUTION]
 
-    elif player.char_class in d10:
-        player.hp = 10 + player.stats[Stat.CONSTITUTION]
+    elif player.char_class in d10_hitdice:
+        player.health = 10 + player.stats[Stat.CONSTITUTION]
         player.hit_dice = "1d10"
         if player.level > 1:
             for i in range(2, player.level):
-                player.hp += randint(1, 10) + player.stats[Stat.CONSTITUTION]
+                player.health += randint(1, 10) + player.stats[Stat.CONSTITUTION]
 
-    elif player.char_class in d6:
-        player.hp = 6 + player.stats[Stat.CONSTITUTION]
+    elif player.char_class in d6_hitdice:
+        player.health = 6 + player.stats[Stat.CONSTITUTION]
         player.hit_dice = "1d6"
         if player.level > 1:
             for i in range(2, player.level):
-                player.hp += randint(1, 6) + player.stats[Stat.CONSTITUTION]
+                player.health += randint(1, 6) + player.stats[Stat.CONSTITUTION]
 
-    elif player.char_class in d12:
-        player.hp = 12 + player.stats[Stat.CONSTITUTION]
+    elif player.char_class in d12_hitdice:
+        player.health = 12 + player.stats[Stat.CONSTITUTION]
         player.hit_dice = "1d12"
         if player.level > 1:
             for i in range(2, player.level):
-                player.hp += randint(1, 12) + player.stats[Stat.CONSTITUTION]
+                player.health += randint(1, 12) + player.stats[Stat.CONSTITUTION]
 
 
 def race_stat_effects(player):
@@ -386,7 +389,7 @@ def print_char(character):
 
     print("Class: {0}".format(character.char_class.name.capitalize()))
     print("Level: {0}".format(character.level))
-    print("HP: {0}".format(character.hp))
+    print("HP: {0}".format(character.health))
     print("Hit Dice: {0}".format(character.hit_dice))
 
     print("Alignment: {0}".format(
@@ -439,10 +442,10 @@ def main():
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--version":
             print("D&D Character Generator 5th Edition version {0}".format(__version__))
-            exit(0)
+            sys.exit(0)
         elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
             print(__doc__)
-            exit(0)
+            sys.exit(0)
         elif sys.argv[1]:
             chars_to_generate = int((sys.argv[1])[1:])  # Exclude the - on the argument
 
@@ -454,9 +457,9 @@ def main():
         else:
             print("Invalid argument passed: {0}".format(sys.argv[1]))
             print(__doc__)
-            exit(1)
+            sys.exit(1)
 
-    for ch in range(chars_to_generate):
+    for i in range(chars_to_generate):
         character = generate(lvl)
         print_char(character)
 

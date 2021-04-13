@@ -15,10 +15,15 @@
 # along with D&D Character Generator 5e.  If not, see <https://www.gnu.org/licenses/>.
 
 
+"""A collection of components used for the main character generator."""
+
+
 from enum import Enum
 
 
 class Race(Enum):
+    """Character races."""
+
     HUMAN = 0
     ELF = 1
     DWARF = 2
@@ -31,6 +36,8 @@ class Race(Enum):
 
 
 class Stat(Enum):
+    """Character stats."""
+
     STRENGTH = 0
     DEXTERITY = 1
     CONSTITUTION = 2
@@ -40,6 +47,8 @@ class Stat(Enum):
 
 
 class Size(Enum):
+    """Character sizes."""
+
     SMALL = 0
     MEDIUM = 1
     LARGE = 2
@@ -47,6 +56,8 @@ class Size(Enum):
 
 
 class Language(Enum):
+    """Languages characters can speak."""
+
     COMMON = 0
     ELVISH = 1
     DWARVISH = 2
@@ -58,6 +69,8 @@ class Language(Enum):
 
 
 class Alignment(Enum):
+    """Alignments for characters."""
+
     LAWFUL_GOOD = 0
     LAWFUL_NEUTRAL = 1
     LAWFUL_EVIL = 2
@@ -70,6 +83,8 @@ class Alignment(Enum):
 
 
 class BaseClass(Enum):
+    """Base classes for characters."""
+
     BARBARIAN = 0
     BARD = 1
     CLERIC = 2
@@ -85,6 +100,8 @@ class BaseClass(Enum):
 
 
 class RaceTraits(Enum):
+    """Racial trait names."""
+
     DARKVISION = "Darkvision"
     KEEN_SENSES = "Keen Senses"
     FEY_ANCESTRY = "Fey Ancestry"
@@ -101,7 +118,7 @@ class RaceTraits(Enum):
     MENACING = "Menacing"
     RELENTLESS_ENDURANCE = "Relentless Endurance"
     SAVAGE_ATTACKS = "Savage Attacks"
-    DRACONIC_ANCESTRY= "Draconic Ancestry"
+    DRACONIC_ANCESTRY = "Draconic Ancestry"
     DAMAGE_RESISTANCE = "Damage Resistance"
     BREATH_WEAPON = "Breath Weapon"
     HELLISH_RESISTANCE = "Hellish Resistance"
@@ -109,6 +126,8 @@ class RaceTraits(Enum):
 
 
 class StatProficiencies(Enum):
+    """Saves that characters can be proficient in."""
+
     STRENGTH = 0
     DEXTERITY = 1
     CONSTITUTION = 2
@@ -118,6 +137,8 @@ class StatProficiencies(Enum):
 
 
 class TestProficiencies(Enum):
+    """Skills that characters can be proficient in."""
+
     ATHLETICS = 0
     ACROBATICS = 1
     SLEIGHT_OF_HAND = 8
@@ -139,6 +160,7 @@ class TestProficiencies(Enum):
 
 
 class BaseEquipProficiencies(Enum):
+    """General equipment classes that characters can be proficient in."""
     SIMPLE_WEAPONS = 0
     MARTIAL_WEAPONS = 1
     LIGHT_ARMOR = 2
@@ -148,11 +170,12 @@ class BaseEquipProficiencies(Enum):
 
 
 class EquipProficiencies(Enum):
+    """Specific weapons that characters can be proficient in."""
     CLUB = 0
     DAGGER = 1
     GREATCLUB = 2
-    Handaxe = 3
-    Javelin = 4
+    HANDAXE = 3
+    JAVELIN = 4
     LIGHT_HAMMER = 5
     MACE = 6
     QUARTERSTAFF = 7
@@ -189,6 +212,7 @@ class EquipProficiencies(Enum):
 
 
 class ToolProficiencies(Enum):
+    """Tools that characters can be proficient in."""
     ALCHEMIST_SUPPLIES = 0
     BREWER_SUPPLIES = 1
     CALLIGRAPHER_TOOLS = 2
@@ -226,27 +250,35 @@ class ToolProficiencies(Enum):
     PLAYING_CARD_SET = 34
     THREE_DRAGON_ANTE_SET = 35
 
+
 race_traits = {
     Race.HUMAN: [],
 
-    Race.ELF: [RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY, RaceTraits.TRANCE],
+    Race.ELF: [RaceTraits.DARKVISION, RaceTraits.KEEN_SENSES, RaceTraits.FEY_ANCESTRY,
+               RaceTraits.TRANCE],
 
-    Race.DWARF: [RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE, RaceTraits.DWARVERN_COMBAT_TRAINING,
+    Race.DWARF: [RaceTraits.DARKVISION, RaceTraits.DWARVEN_RESISTANCE,
+                 RaceTraits.DWARVERN_COMBAT_TRAINING,
                  RaceTraits.TOOL_PROFICIENCY, RaceTraits.STONECUNNING],
 
     Race.GNOME: [RaceTraits.DARKVISION, RaceTraits.GNOME_CUNNING],
 
-    Race.HALFLING: [RaceTraits.LUCKY, RaceTraits.BRAVE, RaceTraits.HALFLING_NIMBLENESS],
+    Race.HALFLING: [RaceTraits.LUCKY, RaceTraits.BRAVE,
+                    RaceTraits.HALFLING_NIMBLENESS],
 
-    Race.HALF_ELF: [RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY, RaceTraits.SKILL_VERSATILITY],
+    Race.HALF_ELF: [RaceTraits.DARKVISION, RaceTraits.FEY_ANCESTRY,
+                    RaceTraits.SKILL_VERSATILITY],
 
-    Race.HALF_ORC: [RaceTraits.DARKVISION, RaceTraits.MENACING, RaceTraits.RELENTLESS_ENDURANCE,
-                    RaceTraits.SAVAGE_ATTACKS],
+    Race.HALF_ORC: [RaceTraits.DARKVISION, RaceTraits.MENACING,
+                    RaceTraits.RELENTLESS_ENDURANCE, RaceTraits.SAVAGE_ATTACKS],
 
-    Race.DRAGONBORN: [RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE, RaceTraits.BREATH_WEAPON],
+    Race.DRAGONBORN: [RaceTraits.DRACONIC_ANCESTRY, RaceTraits.DAMAGE_RESISTANCE,
+                      RaceTraits.BREATH_WEAPON],
 
-    Race.TIEFLING: [RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE, RaceTraits.INFERNAL_LEGACY]
+    Race.TIEFLING: [RaceTraits.DARKVISION, RaceTraits.HELLISH_RESISTANCE,
+                    RaceTraits.INFERNAL_LEGACY]
 }
+
 
 race_proficiencies = {
     Race.HUMAN: set(),
@@ -309,7 +341,7 @@ class_proficiencies = {
         BaseEquipProficiencies.LIGHT_ARMOR,
         BaseEquipProficiencies.MEDIUM_ARMOR, BaseEquipProficiencies.SHIELD,
         EquipProficiencies.CLUB, EquipProficiencies.DAGGER,
-        EquipProficiencies.DART, EquipProficiencies.Javelin,
+        EquipProficiencies.DART, EquipProficiencies.JAVELIN,
         EquipProficiencies.QUARTERSTAFF,
         EquipProficiencies.SCIMITAR, EquipProficiencies.SICKLE,
         EquipProficiencies.SLING, EquipProficiencies.SPEAR,
@@ -386,7 +418,7 @@ class_proficiencies = {
     }
 }
 
-""" Choices for the class-based proficiencies that are 'pick x from 
+""" Choices for the class-based proficiencies that are 'pick x from
     {y, z, ...}
 """
 class_proficiency_choices = {
