@@ -30,7 +30,7 @@ Optional arguments:
 """
 
 __author__ = "Quinn Luetzow"
-__version__ = 2.2
+__version__ = 2.3
 
 
 import sys
@@ -58,7 +58,7 @@ class Character:
         self.hit_dice = None
         self.speed = None
         self.size = None
-        self.languages = []
+        self.languages = set()
         self.proficiencies = set()
 
 
@@ -110,35 +110,35 @@ def traits(player):
 def languages(player):
     """Assign racial and extra languages to the character being created"""
 
-    player.languages.append(Language(0))  # All characters speak Common
+    player.languages.add(Language(0))  # All characters speak Common
 
     if player.race is Race.HUMAN:
-        player.languages.append(Language(randint(1, 7)))
+        player.languages.add(Language(randint(1, 7)))
     elif player.race is Race.ELF:
-        player.languages.append(Language.ELVISH)
+        player.languages.add(Language.ELVISH)
     elif player.race is Race.DWARF:
-        player.languages.append(Language.DWARVISH)
+        player.languages.add(Language.DWARVISH)
     elif player.race is Race.GNOME:
-        player.languages.append(Language.GNOMISH)
+        player.languages.add(Language.GNOMISH)
     elif player.race is Race.HALFLING:
-        player.languages.append(Language.HALFLING)
+        player.languages.add(Language.HALFLING)
     elif player.race is Race.HALF_ELF:
-        player.languages.append(Language.ELVISH)
-        player.languages.append(Language(randint(2, 7)))
+        player.languages.add(Language.ELVISH)
+        player.languages.add(Language(randint(2, 7)))
     elif player.race is Race.HALF_ORC:
-        player.languages.append(Language.ORC)
+        player.languages.add(Language.ORC)
     elif player.race is Race.DRAGONBORN:
-        player.languages.append(Language.DRACONIC)
+        player.languages.add(Language.DRACONIC)
     elif player.race is Race.TIEFLING:
-        player.languages.append(Language.INFERNAL)
+        player.languages.add(Language.INFERNAL)
 
 
 def health(player):
-    """Assign charcter's class-based health points and hit dice"""
+    """Assign character's class-based health points and hit dice"""
 
     d6 = {BaseClass.SORCERER, BaseClass.WIZARD}
     d8 = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
-           BaseClass.ROGUE, BaseClass.WARLOCK}
+          BaseClass.ROGUE, BaseClass.WARLOCK}
     d10 = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
 
     d12 = {BaseClass.BARBARIAN}
@@ -171,6 +171,7 @@ def health(player):
             for i in range(2, player.level):
                 player.hp += randint(1, 12) + player.stats[Stat.CONSTITUTION]
 
+
 def race_stat_effects(player):
     """Apply racial stat bonuses to the character being created"""
 
@@ -178,6 +179,7 @@ def race_stat_effects(player):
     player.size = Size.MEDIUM
 
     if player.race is Race.HUMAN:
+        # Increment every stat by 1.
         for key, val in player.stats.items():
             player.stats[key] += 1
     elif player.race is Race.ELF:
@@ -195,7 +197,6 @@ def race_stat_effects(player):
         player.speed = 25
     elif player.race is Race.HALF_ELF:
         player.stats[Stat.CHARISMA] += 2
-
 
         rand_stat1 = randint(0, 5)  # Pick two random stats to give bonus to
         rand_stat2 = randint(0, 5)
@@ -236,54 +237,113 @@ def race_stat_effects(player):
         player.stats[Stat.INTELLIGENCE] += 1
         player.stats[Stat.CHARISMA] += 2
 
-    # Make sure no stats are over 18 (max value) from racial bonuses
+    # Make sure no stats are over 20 (max value) from racial bonuses
     for key, val in player.stats.items():
-        if player.stats[key] > 18:
-            player.stats[key] = 18
+        if player.stats[key] > 20:
+            player.stats[key] = 20
+
+
+def level_stat_effects(player):
+    """Assign ASI stat bumps to the character being created."""
+
+    disallowed_stats = set()  # Stats that are maxed out at 20 already
+
+    for stat in player.stats:
+        if stat.value == 20:
+            disallowed_stats.add(stat)
+
+    # Milestone levels each class gets ASI at. Fighters get extra,
+    # so will be processed separately.
+    basic_asi_milestones = {4, 8, 12, 16, 19}
+    fighter_asi_milestones = {4, 6, 8, 12, 14, 16, 19}
+
+    def select_stat(disallowed):
+        stat_1 = None
+        stat_2 = None
+
+        # Loop until valid stats are chosen
+        while (stat_1 in disallowed or not stat_1 and
+               stat_2 in disallowed or not stat_2):
+            stat_1 = Stat(randint(0, 5))
+            stat_2 = Stat(randint(0, 5))
+
+        return stat_1, stat_2
+
+    # Fighters get extra ASI bonuses, so run separately.
+    if player.char_class == BaseClass.FIGHTER:
+        for milestone_level in fighter_asi_milestones:  # Loop for each ASI
+            if player.level >= milestone_level:
+                # Select stat and increment by 1
+                stat1, stat2 = select_stat(disallowed_stats)
+                player.stats[stat1] += 1
+                player.stats[stat2] += 1
+
+                # To avoid going above 20 in any stat, if at 20 after this
+                # round of bumps, add to disallowed stats.
+                if player.stats[stat1] == 20:
+                    disallowed_stats.add(stat1)
+                if player.stats[stat2] == 20:
+                    disallowed_stats.add(stat2)
+
+    # All other class get the same number of ASI bonuses, so share logic.
+    else:
+        for milestone_level in basic_asi_milestones:  # Loop for each ASI.
+            if player.level >= milestone_level:
+                # Select stat and increment by 1.
+                stat1, stat2 = select_stat(disallowed_stats)
+                player.stats[stat1] += 1
+                player.stats[stat2] += 1
+
+                # To avoid going above 20 in any stat, if at 20 after this
+                # round of bumps, add to disallowed stats.
+                if player.stats[stat1] == 20:
+                    disallowed_stats.add(stat1)
+                if player.stats[stat2] == 20:
+                    disallowed_stats.add(stat2)
 
 
 def proficiencies(player):
     """Assign proficiencies to the character being created."""
 
-    # Cutoff point for gaming set proficiencies, needed for monk
-    _game_set_cutoff = 32
+    # Cutoff point for gaming set proficiencies, needed for monk.
+    game_set_cutoff = 32
 
-    # Cutoff points for instrument proficiencies, needed for bard
-    _instrument_start_cutoff = 19
-    _instrument_end_cutoff = 28
+    # Cutoff points for instrument proficiencies, needed for bard.
+    instrument_start_cutoff = 19
+    instrument_end_cutoff = 28
 
-    # How many random proficiencies
-    c2 = {
+    # How many random proficiencies.
+    choose2 = {
         BaseClass.BARBARIAN, BaseClass.CLERIC, BaseClass.DRUID,
         BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.SORCERER,
         BaseClass.WARLOCK, BaseClass.WIZARD, BaseClass.MONK
     }
-    c3 = {BaseClass.BARD, BaseClass.RANGER}
-    c4 = {BaseClass.ROGUE}
+    choose3 = {BaseClass.BARD, BaseClass.RANGER}
+    choose4 = {BaseClass.ROGUE}
 
-    # Monk can also choose from anything except game sets
-    monk_opt = [ToolProficiencies(x) for x in range(_game_set_cutoff)]
+    # Monk can also choose from anything except game sets.
+    monk_opt = [ToolProficiencies(x) for x in range(game_set_cutoff)]
 
-    # Bard can choose from random instruments
+    # Bard can choose from random instruments.
     bard_opt = [
-        ToolProficiencies(x) for x in range(_instrument_start_cutoff,
-                                            _instrument_end_cutoff)
+        ToolProficiencies(x) for x in range(instrument_start_cutoff,
+                                            instrument_end_cutoff)
     ]
 
-
-    def select(amount, _class=None):
+    def select_proficiency(amount):
         """Select the random proficiencies for the character"""
 
         options_list = list(class_proficiency_choices[player.char_class])
 
-        # range() starts at 0, so subtract 1 to get the right number of selections
+        # range() starts at 0, so subtract 1 to get the right number of selections.
         for i in range(amount - 1):
             while True:
                 selection = options_list[randint(0, len(options_list) - 1)]
                 if selection not in player.proficiencies:
+                    player.proficiencies.add(selection)
                     break
 
-        # Add random extra proficiencies for Monk and Bard
+        # Add random extra proficiencies for Monk and Bard.
         if player.char_class is BaseClass.MONK:
             player.proficiencies.add(monk_opt[randint(0, len(monk_opt) - 1)])
         elif player.char_class is BaseClass.BARD:
@@ -296,18 +356,17 @@ def proficiencies(player):
                 else:
                     continue
 
-
+    # Combine racial and class proficiencies together.
     player.proficiencies = race_proficiencies[player.race]
-    player.proficiencies.add(x for x in class_proficiencies[player.char_class])
+    player.proficiencies = player.proficiencies.union(class_proficiencies[player.char_class])
 
-    if player.char_class in c2:
-        select(2, player.char_class)
-    elif player.char_class in c3:
-        select(3, player.char_class)
-    elif player.char_class in c4:
-        select(4, player.char_class)
-
-
+    # Select random proficiencies for class that get them.
+    if player.char_class in choose2:
+        select_proficiency(2)
+    elif player.char_class in choose3:
+        select_proficiency(3)
+    elif player.char_class in choose4:
+        select_proficiency(4)
 
 
 def print_char(character):
@@ -315,6 +374,8 @@ def print_char(character):
 
     print("Gender: {0}".format("Female" if character.gender else "Male"))
     print("Race: {0}".format(character.race.name.capitalize()))
+    print("Size: {0}".format(character.size.name.capitalize()))
+    print("Walk speed: {0} feet".format(character.speed))
 
     print("Racial Traits: {0}".format(
         capwords(", ".join(x.name for x in character.traits).replace("_", " ")))
@@ -338,8 +399,9 @@ def print_char(character):
         capwords(", ".join(x.name for x in character.languages).replace("_", " ")))
     )
 
-    print("Walk speed: {0} feet".format(character.speed))
-    print("Size: {0}".format(character.size.name.capitalize()))
+    print("Proficiencies: {0}".format(
+        capwords(", ".join(x.name for x in character.proficiencies).replace("_", " ")))
+    )
 
     print()  # Print empty line between characters
 
@@ -354,8 +416,9 @@ def generate(lvl):
     char_class(player)
     alignment(player)
     stats(player)
-    race_stat_effects(player)
     level(player, lvl)
+    race_stat_effects(player)
+    level_stat_effects(player)
     health(player)
     languages(player)
     traits(player)
