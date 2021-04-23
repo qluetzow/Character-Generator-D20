@@ -1,4 +1,4 @@
-# D&D Character Generator 5e Copyright (C) 2019-2020 Quinn Luetzow
+# D&D Character Generator 5e Copyright (C) 2019-2021 Quinn Luetzow
 # This file is part of D&D Character Generator 5e.
 
 # D&D Character Generator 5e is free software: you can redistribute it and/or modify
