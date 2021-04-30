@@ -1,18 +1,19 @@
-# D&D Character Generator 5e Copyright (C) 2019-2021 Quinn Luetzow
-# This file is part of D&D Character Generator 5e.
+# Standard Fantasy Character Generator Copyright (C) 2019-2021 Quinn Luetzow
+# This file is part of Standard Fantasy Character Generator.
 
-# D&D Character Generator 5e is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# Standard Fantasy Character Generator is free software: you can
+# redistribute it and/or modify it under the terms of the GNU General
+# Public License as published by the Free Software Foundation, either
+# version 3 of the License, or (at your option) any later version.
 
-# D&D Character Generator 5e is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Standard Fantasy Character Generator is distributed in the hope that
+# it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+# the GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with D&D Character Generator 5e.  If not, see <https://www.gnu.org/licenses/>.
+# along with Standard Fantasy Character Generator. If not, see
+# <https://www.gnu.org/licenses/>.
 
 #!/usr/bin/env python3
 

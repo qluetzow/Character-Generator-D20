@@ -1,8 +1,6 @@
-# D-D-Char-Gen-5e
+# Standard Fantasy Character Generator
 
-Character Generator for Dungeons & Dragons 5th Edition.
-
-A program to generate randomized characters for D&D 5th Edition.
+Character Generator typical fantasy RPGs.
 
 Usage: python char_gen_5e.py [--version] [--help] [-N] [-L]
 
