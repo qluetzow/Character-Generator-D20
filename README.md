@@ -1,6 +1,6 @@
 # Standard Fantasy Character Generator
 
-Character Generator typical fantasy RPGs.
+Character Generator for common fantasy RPGs.
 
 Usage: python char_gen.py [--version] [--help] [-N] [-L]
 
