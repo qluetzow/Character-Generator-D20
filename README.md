@@ -2,7 +2,7 @@
 
 Character Generator typical fantasy RPGs.
 
-Usage: python char_gen_5e.py [--version] [--help] [-N] [-L]
+Usage: python char_gen.py [--version] [--help] [-N] [-L]
 
 Optional arguments:
     -h, --help     Show this help message and exit.
