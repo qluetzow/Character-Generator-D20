@@ -15,7 +15,7 @@
 # along with Standard Fantasy Character Generator. If not, see
 # <https://www.gnu.org/licenses/>.
 
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 
 """ Character Generator for Dungeons & Dragons 5th Edition.
 
