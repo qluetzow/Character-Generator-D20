@@ -15,7 +15,7 @@
 # along with Standard Fantasy Character Generator. If not, see
 # <https://www.gnu.org/licenses/>.
 
-#!/usr/bin/env python3
+# !/usr/bin/env python3
 
 """ Character Generator for Dungeons & Dragons 5th Edition.
 
@@ -32,7 +32,6 @@ Optional arguments:
 
 __author__ = "Quinn Luetzow"
 __version__ = 2.3
-
 
 import sys
 from random import randint
@@ -145,7 +144,7 @@ def health(player):
 
     d6_hitdice = {BaseClass.SORCERER, BaseClass.WIZARD}
     d8_hitdice = {BaseClass.BARD, BaseClass.CLERIC, BaseClass.DRUID, BaseClass.MONK,
-          BaseClass.ROGUE, BaseClass.WARLOCK}
+                  BaseClass.ROGUE, BaseClass.WARLOCK}
     d10_hitdice = {BaseClass.FIGHTER, BaseClass.PALADIN, BaseClass.RANGER}
 
     d12_hitdice = {BaseClass.BARBARIAN}
@@ -185,64 +184,66 @@ def race_stat_effects(player):
     player.speed = 30  # "Default" or most common speed and size, here to avoid repetition
     player.size = Size.MEDIUM
 
-    if player.race is Race.HUMAN:
-        # Increment every stat by 1.
-        for key, val in player.stats.items():
-            player.stats[key] += 1
-    elif player.race is Race.ELF:
-        player.stats[Stat.DEXTERITY] += 2
-    elif player.race is Race.DWARF:
-        player.stats[Stat.CONSTITUTION] += 2
-        player.speed = 25
-    elif player.race is Race.GNOME:
-        player.stats[Stat.INTELLIGENCE] += 2
-        player.size = Size.SMALL
-        player.speed = 25
-    elif player.race is Race.HALFLING:
-        player.stats[Stat.DEXTERITY] += 2
-        player.size = Size.SMALL
-        player.speed = 25
-    elif player.race is Race.HALF_ELF:
-        player.stats[Stat.CHARISMA] += 2
+    match player.race:
+        case Race.HUMAN:
+            for key, val in player.stats.items():
+                player.stats[key] += 1
+        case Race.ELF:
+            player.stats[Stat.DEXTERITY] += 2
+        case Race.DWARF:
+            player.stats[Stat.CONSTITUTION] += 2
+            player.speed = 25
+        case Race.GNOME:
+            player.stats[Stat.INTELLIGENCE] += 2
+            player.size = Size.SMALL
+            player.speed = 25
+        case Race.HALFLING:
+            player.stats[Stat.DEXTERITY] += 2
+            player.size = Size.SMALL
+            player.speed = 25
+        case Race.HALF_ELF:
+            player.stats[Stat.CHARISMA] += 2
 
-        rand_stat1 = randint(0, 5)  # Pick two random stats to give bonus to
-        rand_stat2 = randint(0, 5)
+            rand_stat1 = randint(0, 5)  # Pick two random stats to give bonus to
+            rand_stat2 = randint(0, 5)
 
-        if rand_stat1 == 0:
+            match rand_stat1:
+                case 0:
+                    player.stats[Stat.STRENGTH] += 1
+                case 1:
+                    player.stats[Stat.DEXTERITY] += 1
+                case 2:
+                    player.stats[Stat.CONSTITUTION] += 1
+                case 3:
+                    player.stats[Stat.INTELLIGENCE] += 1
+                case 4:
+                    player.stats[Stat.WISDOM] += 1
+                case 5:
+                    player.stats[Stat.CHARISMA] += 1
+
+            match rand_stat2:
+                case 0:
+                    player.stats[Stat.STRENGTH] += 1
+                case 1:
+                    player.stats[Stat.DEXTERITY] += 1
+                case 2:
+                    player.stats[Stat.CONSTITUTION] += 1
+                case 3:
+                    player.stats[Stat.INTELLIGENCE] += 1
+                case 4:
+                    player.stats[Stat.WISDOM] += 1
+                case 5:
+                    player.stats[Stat.CHARISMA] += 1
+
+        case Race.HALF_ORC:
+            player.stats[Stat.CONSTITUTION] += 2
             player.stats[Stat.STRENGTH] += 1
-        elif rand_stat1 == 1:
-            player.stats[Stat.DEXTERITY] += 1
-        elif rand_stat1 == 2:
+        case Race.DRAGONBORN:
+            player.stats[Stat.STRENGTH] += 2
             player.stats[Stat.CONSTITUTION] += 1
-        elif rand_stat1 == 3:
+        case Race.TIEFLING:
+            player.stats[Stat.CHARISMA] += 2
             player.stats[Stat.INTELLIGENCE] += 1
-        elif rand_stat1 == 4:
-            player.stats[Stat.WISDOM] += 1
-        elif rand_stat1 == 5:
-            player.stats[Stat.CHARISMA] += 1
-
-        if rand_stat2 == 0:
-            player.stats[Stat.STRENGTH] += 1
-        elif rand_stat2 == 1:
-            player.stats[Stat.DEXTERITY] += 1
-        elif rand_stat2 == 2:
-            player.stats[Stat.CONSTITUTION] += 1
-        elif rand_stat2 == 3:
-            player.stats[Stat.INTELLIGENCE] += 1
-        elif rand_stat2 == 4:
-            player.stats[Stat.WISDOM] += 1
-        elif rand_stat2 == 5:
-            player.stats[Stat.CHARISMA] += 1
-
-    elif player.race is Race.HALF_ORC:
-        player.stats[Stat.STRENGTH] += 2
-        player.stats[Stat.CONSTITUTION] += 1
-    elif player.race is Race.DRAGONBORN:
-        player.stats[Stat.STRENGTH] += 2
-        player.stats[Stat.CONSTITUTION] += 1
-    elif player.race is Race.TIEFLING:
-        player.stats[Stat.INTELLIGENCE] += 1
-        player.stats[Stat.CHARISMA] += 2
 
     # Make sure no stats are over 20 (max value) from racial bonuses
     for key, val in player.stats.items():
@@ -396,7 +397,7 @@ def print_char(character):
     print("Alignment: {0}".format(
         capwords(
             character.alignment.name.replace("_", " "))
-        )
+    )
     )
 
     for key, val in character.stats.items():
