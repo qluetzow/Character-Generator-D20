@@ -1,4 +1,4 @@
-# Standard Fantasy Character Generator Copyright (C) 2019-2021 Quinn Luetzow
+# Standard Fantasy Character Generator Copyright (C) 2019-2024 Quinn Luetzow
 # This file is part of Standard Fantasy Character Generator.
 
 # Standard Fantasy Character Generator is free software: you can
@@ -17,11 +17,11 @@
 
 #!/usr/bin/env python3
 
-""" Character Generator for Dungeons & Dragons 5th Edition.
+""" Character Generator for D20 systems.
 
-A program to generate randomized characters for D&D 5th Edition.
+A program to generate randomized characters for D20 systems.
 
-Usage: python char_gen_5e.py [--version] [--help] [-N] [-L]
+Usage: python char_gen.py [--version] [--help] [-N] [-L]
 
 Optional arguments:
     -h, --help     Show this help message and exit
@@ -44,7 +44,7 @@ from char_gen_components import (
 
 
 class Character:
-    """Class representing a D&D 5th Edition character"""
+    """Class representing a character"""
 
     def __init__(self):
         self.gender = None
@@ -443,7 +443,7 @@ def main():
 
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--version":
-            print("D&D Character Generator 5th Edition version {0}".format(__version__))
+            print("D20 Character Generator version {0}".format(__version__))
             sys.exit(0)
         elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
             print(__doc__)

@@ -1,6 +1,6 @@
-# Standard Fantasy Character Generator
+# D20 Character Generator
 
-Character Generator for common fantasy RPGs.
+Character Generator for RPGs using the D20 system.
 
 Usage: python char_gen.py [--version] [--help] [-N] [-L]
 
