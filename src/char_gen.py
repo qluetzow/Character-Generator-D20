@@ -31,7 +31,7 @@ Optional arguments:
 """
 
 __author__ = "Quinn Luetzow"
-__version__ = 2.3
+__version__ = 3.0
 
 import sys
 from random import randint
